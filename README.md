@@ -1,11 +1,11 @@
-# Methoden quantitativer Forschung / Einführung in die Datenanalyse mit R 
+# Methoden quantitativer Forschung - Einstieg in die Datenanalyse mit R 
 
-**Dozent:innentage 01/2022 - Virtuell 20 - Mi	02.02.2022 von 09:30 - 12:00**
+Veranstaltungs-Repository für *DVDW 03/2021 Virtuell 9*
 
-Herzlich willkommen zum GitHub-Repository zur Veranstaltung.
+Hier finden Sie alle Unterlagen für die Veranstaltung.
 
-Hier finden Sie alle Unterlagen zum Vortrag und nach der Veranstaltung auch die Mitschrift.
+*Workshop-Als-Rmarkdown.Rmd* -- Hier finden Sie die wichtigsten Code-Beispiele aus der Veranstaltung als eigenständiges R Markdown. Nutzen Sie den *knitr*-Button um alles in HTML oder Word zu übersetzen oder nuten Sie den *Play*-Button an den Code-Beispielen um einzelne Passagen auszuprobieren.
 
-Viel Spaß und erfolgreiches Lernen/Lehren wünscht Ihnen 
+*Skript-DozWS-MqF-Einstieg-in-die-Datenanalyse-mit-R.pdf* -- Das aktuelle Skript zur Veranstaltung zum Nacharbeiten und als Tipp-Sammlung.
 
-Norman Markgraf
+*SaratogaHouses.csv* -- Die Datentabelle mit der in der Veranstaltung gearbeitet wird.

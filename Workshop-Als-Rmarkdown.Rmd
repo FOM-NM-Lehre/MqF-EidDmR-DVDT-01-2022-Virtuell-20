@@ -1,0 +1,364 @@
+---
+output:
+  word_document: default
+  html_document: default
+editor_options:
+  chunk_output_type: inline
+---
+## Crashkurs R
+
+Wir arbeiten mit dem Paket 'mosaic', darum laden wir es zu Beginn. 
+Nützlich ist auch das Paket 'here', welches wir daher umgehend auch laden:
+
+```{r, message=FALSE}
+library(mosaic)  # 
+library(here)    # 
+```
+
+### Die zentrale Idee von 'mosaic'
+
+```{r, eval = FALSE}
+analysiere( y  # ggfs. abhängige Variable
+            ~  x # unabhängige Variable(n)
+            | z, # ggfs. bedingende (gruppierende) Variable(n)
+            Optionen, # ggfs. weitere Optionen
+            data = daten ) # Datensatz 
+```
+
+`analysiere()`: Was soll R tun?^[Befehlsübersicht [hier](https://github.com/luebby/Datenanalyse-mit-R/blob/master/Installation/R-mosaic-Kurzreferenz.pdf)]
+
+*Hinweis*: unter macOS: `~: alt+n oder option+n`, `|: alt+7 oder option+7`
+
+
+### Zentrale Fragen die SIE sich stellen sollten!
+
+1. Was soll der Computer für mich tun? --> `meineanalyse`
+
+2. Was muss der Computer dafür wissen? --> Parameter `(....)`
+
+
+```{r, eval = FALSE}
+
+meineanalyse(meiny ~ meinx, data = meinedaten)
+
+```
+
+
+### Vorbereitung Analyse
+
+[Dick De Veaux: How much is a Fireplace Worth?](http://community.amstat.org/HigherLogic/System/DownloadDocumentFile.ashx?DocumentFileKey=288c3e05-1ba5-450d-8ec8-62629b876557&forceDialog=0)^[Siehe auch: `?mosaicData::SaratogaHouses`]
+
+- `Preis`: Preis in $\$$.
+- `Wohnflaeche`: Wohnfläche in $m^2$.
+- `Alter`: Alter der Immobilie in Jahren.
+- `Klimaanlage`: Inwieweit eine (zentrale) Klimaanlage vorhanden ist.
+- `Kamin`: Inwieweit ein Kamin vorhanden ist.
+- `Heizung`: Heizsystem: Gas, Strom oder Öl.
+
+
+```{r}
+# Paket laden
+library(mosaic)
+
+# URL für die Datentabelle
+daten_url <- "http://statistix.org/Data/SaratogaHouses.csv"
+
+# Daten in R aus derCSV-Datei einlesen
+Houses <- read.csv2(daten_url)
+```
+
+
+### Inspizieren der Datentabelle {.shrink}
+
+```{r}
+inspect(Houses)
+```
+
+
+### Eine Variable
+
+**meinx: kategorial**
+
+```{r, eval=FALSE}
+# Säulendiagramm
+gf_bar( ~ Klimaanlage, 
+          data = Houses)
+# Tabelle
+tally( ~ Klimaanlage, 
+       data = Houses)
+# Anteil
+prop( ~ Klimaanlage, 
+      data = Houses, 
+      success = "Ja")
+```
+
+
+**meinx: numerisch**
+
+```{r, eval=FALSE}
+# Histogramm
+gf_histogram( ~ Preis, 
+           data = Houses)
+# Kennzahlen
+favstats( ~ Preis, 
+          data = Houses)
+# Mittelwert
+mean( ~ Preis, 
+      data = Houses)
+```
+
+
+### Eine kategoriale Variable {.shrink}
+
+```{r, fig.align="center", out.width="40%"}
+# Säulendiagramm
+gf_bar( ~ Klimaanlage, data = Houses)
+# Tabelle
+tally( ~ Klimaanlage, data = Houses)
+# Anteil
+prop( ~ Klimaanlage, success = "Ja", data = Houses)
+```
+
+
+### Eine numerische Variable {.shrink}
+
+```{r fig.align="center", out.width="40%"}
+# Histogramm
+gf_histogram( ~ Preis, data = Houses)
+# Kennzahlen
+favstats( ~ Preis, data = Houses)
+# Mittelwert
+mean( ~ Preis, data = Houses)
+```
+
+
+### Zwei Variablen
+
+**meinx, meiny: kategorial**
+
+```{r, eval=FALSE}
+# Mosaikplot
+mosaicplot(Kamin ~ Klimaanlage, 
+           data = Houses)
+# Kreuztabelle
+tally(Kamin ~ Klimaanlage, 
+      data = Houses)
+# Chi-Quadrat Test
+xchisq.test(Kamin ~ Klimaanlage, 
+            data = Houses)
+```
+
+
+**meinx, meiny: metrisch**
+
+```{r, eval=FALSE}
+# Streudiagramm
+gf_point(Preis ~ Wohnflaeche, 
+       data = Houses)
+# Korrelation
+cor(Preis ~ Wohnflaeche, 
+    data = Houses)
+# Korrelationstest
+cor.test(Preis ~ Wohnflaeche, 
+         data = Houses)
+```
+
+
+### Zwei kategoriale Variablen (I/II) {.shrink}
+
+```{r, fig.align="center", out.width="40%"}
+# Mosaikplot
+mosaicplot(Kamin ~ Klimaanlage, data = Houses)
+# Kreuztabelle
+tally(Kamin ~ Klimaanlage, data = Houses)
+```
+
+
+### Zwei kategoriale Variablen (II/II) {.shrink}
+
+```{r, fig.align="center", out.width="40%"}
+# Chi-Quadrat Test
+xchisq.test(Kamin ~ Klimaanlage, data = Houses)
+```
+
+
+### Zwei numerische Variablen (I/II) {.shrink}
+
+```{r, fig.align="center", out.width="40%"}
+# Streudiagramm
+gf_point(Preis ~ Wohnflaeche, data = Houses)
+# Korrelation
+cor(Preis ~ Wohnflaeche, data = Houses)
+```
+
+
+### Zwei numerische Variablen (II/II) {.shrink}
+
+```{r, fig.align="center", out.width="40%"}
+# Korrelationstest
+cor.test(Preis ~ Wohnflaeche, data = Houses)
+```
+
+
+### Zwei Gruppen
+
+**meinx: binär, meiny: kategorial**
+
+```{r, eval=FALSE}
+# Säulendiagramm
+gf_bar( ~ Kamin | Klimaanlage, 
+          data = Houses)
+# Anteile
+prop(Kamin ~ Klimaanlage, 
+     data = Houses,
+     success = "Ja")
+# Anteilstest
+prop.test(Kamin ~ Klimaanlage, 
+     data = Houses,
+     success = "Ja")
+```
+
+
+**meinx: binär, meiny: numerisch**
+
+```{r, eval=FALSE}
+# Histogramm
+gf_histogram( ~ Preis | Kamin, 
+           data = Houses)
+# Mittelwerte
+mean(Preis ~ Kamin, 
+     data = Houses)
+
+# t-Test
+t.test(Preis ~ Kamin, 
+       data = Houses)
+```
+
+
+### Zwei Gruppen, kategorial (I/II) {.shrink}
+
+```{r, fig.align="center", out.width="40%"}
+# Säulendiagramm
+gf_bar( ~ Kamin | Klimaanlage, data = Houses)
+# Anteile
+prop(Kamin ~ Klimaanlage, data = Houses, success = "Ja")
+```
+
+
+### Zwei Gruppen, kategorial (II/II) {.shrink}
+
+```{r, fig.align="center", out.width="40%"}
+# Anteilstest
+prop.test(Kamin ~ Klimaanlage, data = Houses, success = "Ja")
+```
+
+
+### Zwei Gruppen, numerisch (I/II) {.shrink}
+
+```{r, fig.align="center", out.width="40%"}
+# Histogramm
+gf_histogram( ~ Preis | Kamin, data = Houses)
+# Mittelwerte
+mean(Preis ~ Kamin, data = Houses)
+```
+
+
+### Zwei Gruppen, numerisch (II/II) {.shrink}
+
+```{r, fig.align="center", out.width="40%"}
+# t-Test
+t.test(Preis ~ Kamin, data = Houses)
+```
+
+
+### Permutationstest kategorial {.shrink}
+
+```{r, fig.align="center", out.width="40%"}
+# Reproduzierbarkeit
+set.seed(2009)
+# Anteilsdifferenz in Stichprobe
+pdiff_est <- diffprop(Kamin ~ Klimaanlage, success = "Ja", data = Houses)
+# Simuliere H_0: Permutiere Klima
+Nullvtlg <- do(10000) * 
+  diffprop(Kamin ~ shuffle(Klimaanlage), success = "Ja", data = Houses)
+# Histogramm Nullverteilung
+gf_histogram( ~ diffprop, data = Nullvtlg) %>%
+  gf_vline(xintercept = ~ pdiff_est, color = "blue") + xlim(-0.35, 0.35)
+# p-Wert
+prop( ~(abs(diffprop)>=abs(pdiff_est)), data = Nullvtlg )
+```
+
+
+### Permutationstest numerisch {.shrink}
+
+```{r, fig.align="center", out.width="40%"}
+# Reproduzierbarkeit
+set.seed(2009)
+# Mittelwertdifferenz in Stichprobe
+meandiff_est <- diffmean(Preis ~ Kamin, data = Houses)
+# Simuliere H_0: Permutiere Klima
+Nullvtlg <- do(10000) * 
+  diffmean(Preis ~ shuffle(Kamin), data = Houses)
+# Histogramm Nullverteilung
+gf_histogram( ~ diffmean, data = Nullvtlg) %>%
+  gf_vline(xintercept = ~ meandiff_est, color = "blue") + 
+  xlim(-75000, 75000)
+# p-Wert
+prop( ~(abs(diffmean)>=abs(meandiff_est)), data = Nullvtlg)
+```
+
+
+### Bootstrap kategorial {.shrink}
+
+```{r, fig.align="center", out.width="40%"}
+# Reproduzierbarkeit
+set.seed(2009)
+# Simuliere Stichprobenziehung
+Bootvtlg <- do(10000) * 
+  diffprop(Kamin ~ Klimaanlage, success = "Ja", data = resample(Houses))
+# 95% Konfidenzintervall
+ci <- quantile( ~ diffprop, probs = c(0.025, 0.975), data = Bootvtlg)
+# Histogramm
+gf_histogram( ~ diffprop, data = Bootvtlg) %>%
+  gf_vline(xintercept = ci, color = "blue")
+```
+
+
+### Bootstrap numerisch {.shrink}
+
+```{r, fig.align="center", out.width="40%"}
+# Reproduzierbarkeit
+set.seed(2009)
+# Simuliere Stichprobenziehung
+Bootvtlg <- do(10000) * 
+  diffmean(Preis ~ Kamin, data = resample(Houses))
+# 95% Konfidenzintervall
+ci <- quantile( ~ diffmean, probs = c(0.025, 0.975), data = Bootvtlg)
+# Histogramm
+gf_histogram( ~ diffmean, data = Bootvtlg) %>%
+  gf_vline(xintercept = ci, color = "blue")
+
+```
+
+
+### Lineares Modell (I/III)
+
+```{r, fig.align="center", out.width="60%"}
+modnum <- lm(Preis ~ Wohnflaeche + Kamin, data = Houses)
+plotModel(modnum)
+```
+
+
+### Lineares Modell (II/III) {.shrink}
+
+```{r}
+summary(modnum)
+```
+
+
+### Lineares Modell (III/III) {.shrink}
+
+```{r}
+anova(modnum)
+```
+
