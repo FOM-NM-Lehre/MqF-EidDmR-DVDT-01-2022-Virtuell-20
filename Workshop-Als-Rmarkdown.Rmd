@@ -30,7 +30,7 @@ analysiere( y  # ggfs. abhängige Variable
 *Hinweis*: unter macOS: `~: alt+n oder option+n`, `|: alt+7 oder option+7`
 
 
-### Zentrale Fragen die SIE sich stellen sollten!
+### Zentrale Fragen die SIE, als Anwender:in, sich stellen sollten!
 
 1. Was soll der Computer für mich tun? --> `meineanalyse`
 
